@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { supabase } from '../libsupabase'; // Теперь точно на уровень выше
+import { supabase } from '../../libsupabase';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
