@@ -2,22 +2,22 @@
   "name": "inventory-system-co7c",
   "version": "0.1.0",
   "private": true,
- "scripts": {
-  "dev": "next dev",
-  "build": "next build", 
-  "start": "next start",
-  "lint": "next lint"
-}
-}
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
- "dependencies": {
-  "next": "16.1.6",
-  "react": "latest",
-  "react-dom": "latest",
-  "@supabase/supabase-js": "latest",
-  "qrcode.react": "latest",
-  "lucide-react": "latest"
-}
+  "dependencies": {
+    "next": "15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@supabase/supabase-js": "latest",
+    "qrcode.react": "latest",
+    "lucide-react": "latest",
+    "clsx": "latest",
+    "tailwind-merge": "latest"
+  },
   "devDependencies": {
     "typescript": "latest",
     "@types/node": "latest",
