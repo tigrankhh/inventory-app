@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { supabase } from './libsupabase'; 
-import { QRCodeSVG } from 'qrcode.react';
+import { useState } from 'react';
+import { supabase } from '../libsupabase'; // ПРОВЕРЬ: здесь должно быть ДВЕ точки
 
 export default function AssetOS() {
   const [logs, setLogs] = useState<any[]>([]);
