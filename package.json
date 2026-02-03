@@ -10,16 +10,14 @@
 }
 }
   },
-  "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "@supabase/supabase-js": "latest",
-    "qrcode.react": "latest",
-    "lucide-react": "latest",
-    "clsx": "latest",
-    "tailwind-merge": "latest"
-  },
+ "dependencies": {
+  "next": "16.1.6",
+  "react": "latest",
+  "react-dom": "latest",
+  "@supabase/supabase-js": "latest",
+  "qrcode.react": "latest",
+  "lucide-react": "latest"
+}
   "devDependencies": {
     "typescript": "latest",
     "@types/node": "latest",
