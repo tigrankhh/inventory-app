@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
-    // Игнорируем ошибки типов при сборке (на время, чтобы запуститься)
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true, // Игнорируем ошибки типов
   },
   eslint: {
-    // Игнорируем ошибки линтера при сборке
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Игнорируем ошибки линтера
   },
+  // Добавляем пустой конфиг, чтобы сбросить кэш сборщика
+  experimental: {} 
 };
 
 export default nextConfig;
