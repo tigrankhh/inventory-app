@@ -16,7 +16,6 @@ export default async function InventoryPage({
 
   if (!session) redirect('/login')
 
-  // Запрос данных с фильтрацией
   let query = supabase
     .from('inventory_items')
     .select('*')
@@ -40,7 +39,6 @@ export default async function InventoryPage({
         </button>
       </div>
 
-      {/* Контролы */}
       <div className="flex gap-4 mb-8 bg-slate-50 p-4 rounded-[2rem] border border-slate-100">
         <form className="flex-1 relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
