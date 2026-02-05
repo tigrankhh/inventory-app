@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 
@@ -10,88 +10,134 @@ export default function LoginPage() {
   const [isRegistering, setIsRegistering] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
   
   const router = useRouter()
+  // Используем клиентский компонент для браузера
   const supabase = createClientComponentClient()
+
+  // Проверка: если юзер уже залогинен — кидаем на главную
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) router.push('/')
+    }
+    checkUser()
+  }, [router, supabase])
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setMessage(null)
 
-    if (isRegistering) {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` }
-      })
-      if (error) setError(error.message)
-      else alert('Регистрация успешна! Теперь вы можете войти.')
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setError(error.message)
-      else router.push('/')
+    try {
+      if (isRegistering) {
+        // РЕГИСТРАЦИЯ
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            // Важно для корректного редиректа после подтверждения (если оно включено)
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        })
+
+        if (signUpError) throw signUpError
+
+        if (data.user && data.session) {
+          router.push('/')
+        } else {
+          setMessage('Check your email to confirm registration!')
+        }
+      } else {
+        // ВХОД
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
+
+        if (signInError) throw signInError
+        
+        router.refresh()
+        router.push('/')
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-      <div className="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl border border-slate-100">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-black italic tracking-tighter text-blue-600 uppercase">
-            {isRegistering ? 'Join Us' : 'Welcome'}
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+      <div className="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative">
+        {/* Декор */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600 rounded-bl-full opacity-10" />
+        
+        <div className="mb-10 text-center relative">
+          <h1 className="text-5xl font-black italic tracking-tighter text-slate-900 uppercase">
+            {isRegistering ? 'Join' : 'Login'}
           </h1>
-          <p className="text-slate-400 font-bold uppercase text-xs tracking-widest mt-2">
-            Inventory System v3.0
-          </p>
+          <div className="h-2 w-20 bg-blue-600 mx-auto mt-2 rounded-full" />
         </div>
 
-        <form onSubmit={handleAuth} className="space-y-4">
+        <form onSubmit={handleAuth} className="space-y-5 relative">
           <div>
-            <label className="block text-xs font-black uppercase text-slate-500 mb-2 ml-2">Email Address</label>
+            <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Email</label>
             <input 
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
-              placeholder="name@company.com"
+              className="w-full bg-slate-100 border-2 border-transparent rounded-2xl py-4 px-6 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-slate-900"
+              placeholder="boss@inventory.com"
               required
             />
           </div>
+          
           <div>
-            <label className="block text-xs font-black uppercase text-slate-500 mb-2 ml-2">Password</label>
+            <label className="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Password</label>
             <input 
               type="password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
+              className="w-full bg-slate-100 border-2 border-transparent rounded-2xl py-4 px-6 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-slate-900"
               placeholder="••••••••"
               required
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-500 p-4 rounded-xl text-xs font-bold uppercase border border-red-100">
-              {error}
+            <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-xs font-bold border border-red-100 animate-pulse">
+              ⚠️ {error}
+            </div>
+          )}
+
+          {message && (
+            <div className="bg-green-50 text-green-600 p-4 rounded-2xl text-xs font-bold border border-green-100">
+              ✅ {message}
             </div>
           )}
 
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all disabled:opacity-50"
+            className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl disabled:opacity-50 active:scale-95"
           >
-            {loading ? 'Processing...' : isRegistering ? 'Create Account' : 'Sign In'}
+            {loading ? 'Wait...' : isRegistering ? 'Create Account' : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-8 text-center">
+        <div className="mt-10 text-center">
           <button 
-            onClick={() => setIsRegistering(!isRegistering)}
-            className="text-slate-400 font-bold uppercase text-xs hover:text-blue-600 transition-all underline underline-offset-4"
+            onClick={() => {
+              setIsRegistering(!isRegistering)
+              setError(null)
+              setMessage(null)
+            }}
+            className="text-slate-400 font-bold uppercase text-[10px] tracking-widest hover:text-blue-600 transition-all"
           >
-            {isRegistering ? 'Already have an account? Sign In' : 'Need an account? Register Here'}
+            {isRegistering ? 'Already have an account? Login' : 'New here? Register'}
           </button>
         </div>
       </div>
