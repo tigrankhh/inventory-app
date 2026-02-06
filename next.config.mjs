@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: { unoptimized: true },
-  eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true },
+  // Это важно для деплоя на Cloudflare
+  output: 'export', // ТОЛЬКО если у тебя нет API роутов внутри Next.js
+  images: { unoptimized: true }
 };
 
 export default nextConfig;
