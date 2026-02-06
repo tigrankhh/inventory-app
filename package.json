@@ -15,10 +15,13 @@
     "next": "15.1.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "lucide-react": "latest"
+    "lucide-react": "latest",
+    "clsx": "latest",
+    "tailwind-merge": "latest"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "latest",
+    "@tailwindcss/postcss": "latest",
     "@types/node": "20.x",
     "@types/react": "19.x",
     "@types/react-dom": "19.x",
