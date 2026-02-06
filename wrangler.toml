@@ -1,6 +1,6 @@
 name = "inventory-app"
-compatibility_date = "2026-02-04"
-compatibility_flags = [ "nodejs_compat" ]
+pages_build_output_dir = ".vercel/output"
 
-[vars]
-# Здесь можно хранить публичные переменные, если нужно
+[[compatibility_flags]]
+# Это важно для работы Next.js 15 на Edge Runtime
+compatibility_flags = [ "nodejs_compat" ]
