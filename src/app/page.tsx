@@ -1,17 +1,18 @@
-import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@/lib/supabaseServer'
 
-export async function createClient() {
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get() {
-          return undefined // Edge-safe
-        },
-        set() {},
-        remove() {},
-      },
-    }
+export const runtime = 'edge';
+
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: items } = await supabase.from('inventory').select('*')
+
+  return (
+    <main style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', padding: '40px' }}>
+      <h1>Globaaal Network Brrrooo</h1>
+      <div style={{ marginTop: '20px', color: '#0f0' }}>
+        ● Database Connected: {items ? 'YES' : 'NO'}
+      </div>
+      <pre>{JSON.stringify(items, null, 2)}</pre>
+    </main>
   )
 }
