@@ -1,6 +1,6 @@
 name = "inventory-app"
 compatibility_date = "2026-01-20"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = ".vercel/output" # Убедись, что тут нет пробелов в конце!
+pages_build_output_dir = ".vercel/output/static"
 [vars]
 DEBUG = "true"
