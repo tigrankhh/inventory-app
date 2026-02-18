@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Никаких output: 'export'!
-  // Просто оставь его пустым или с твоими настройками изображений/доменов
+  // НИКАКИХ output: 'export'! Для Cloudflare это не нужно.
+  // Убедись, что нет basePath или сложных редиректов.
 };
 
 export default nextConfig;
