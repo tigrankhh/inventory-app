@@ -1,92 +1,43 @@
-'use client';
 export const runtime = 'edge';
 
-
-import { createBrowserClient } from '@supabase/ssr';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  // Инициализируем клиент Supabase внутри компонента
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
-      router.push('/dashboard');
-      router.refresh();
-    }
-  };
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-10 shadow-md">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900">
-          Вход в систему
-        </h2>
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          {error && (
-            <div className="rounded bg-red-50 p-4 text-sm text-red-500">
-              {error}
-            </div>
-          )}
-          <div className="space-y-4 rounded-md shadow-sm">
-            <div>
-              <input
-                type="email"
-                required
-                className="relative block w-full rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
-                type="password"
-                required
-                className="relative block w-full rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
+    <div style={{ backgroundColor: '#38bdf8', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"Courier New", Courier, monospace' }}>
+      <div style={{ 
+        backgroundColor: '#fff', 
+        border: '6px solid #000', 
+        padding: '50px', 
+        boxShadow: '20px 20px 0px #000',
+        width: '100%',
+        maxWidth: '500px'
+      }}>
+        <h2 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '30px', textTransform: 'uppercase' }}>Ident_Verify</h2>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>USER_ACCESS_KEY:</label>
+          <input type="text" style={{ width: '100%', border: '4px solid #000', padding: '15px', fontSize: '1.1rem', outline: 'none' }} placeholder="enter_id..." />
+        </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-            >
-              {loading ? 'Вход...' : 'Войти'}
-            </button>
-          </div>
-        </form>
+        <div style={{ marginBottom: '30px' }}>
+          <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>SECURITY_TOKEN:</label>
+          <input type="password" style={{ width: '100%', border: '4px solid #000', padding: '15px', fontSize: '1.1rem', outline: 'none' }} placeholder="********" />
+        </div>
+
+        <button style={{ 
+          width: '100%', 
+          backgroundColor: '#00ff00', 
+          border: '4px solid #000', 
+          padding: '20px', 
+          fontSize: '1.5rem', 
+          fontWeight: 'bold', 
+          cursor: 'pointer',
+          boxShadow: '8px 8px 0px #000'
+        }}>
+          AUTHORIZE_BRROOO
+        </button>
+        
+        <p style={{ marginTop: '20px', fontSize: '0.8rem' }}>* Only for verified members of Globaaal Network</p>
       </div>
     </div>
   );
 }
-
-
-
